@@ -166,18 +166,21 @@ GROUP BY SoldAsVacant
 ORDER BY 2
 ```
 -- Change the data type of SoldAsVacant from bit to NVARCHAR to allow 'Yes' and 'No' values
+```sql
 ALTER TABLE Nashville
 ALTER COLUMN SoldAsVacant NVARCHAR(55);
-
+```
 -- Update SoldAsVacant column to replace '1' with 'Yes' and '0' with 'No'
+```sql
 UPDATE Nashville
 SET SoldAsVacant = CASE 
     WHEN SoldAsVacant = 'Y' THEN 'Yes'
     WHEN SoldAsVacant = 'N' THEN 'No'
     ELSE SoldAsVacant
 END;
-
+```
 -- Remove duplicate records by using a Common Table Expression (CTE) to identify duplicates
+```sql
 WITH Row_Num AS (
 SELECT *, 
     ROW_NUMBER() OVER(PARTITION BY 
@@ -193,19 +196,20 @@ SELECT *
 FROM Row_Num
 WHERE row_numb > 1 -- Only select duplicates
 ORDER BY PropertyAddress
-
+```
 -- Uncomment the DELETE statement to remove duplicates after verifying the selection
 -- DELETE
 -- FROM Row_Num
 -- WHERE row_numb > 1
 
 -- Select all columns from the Nashville table for inspection
+```sql
 SELECT *
 FROM Nashville
-
--- Drop unused columns from the Nashville table to clean up the dataset
-ALTER TABLE Nashville
-DROP COLUMN PropertyAddress, OwnerAddress, TaxDistrict
 ```
+-- Drop unused columns from the Nashville table to clean up the dataset
+```sql
+ALTER TABLE Nashville
+DROP COLUMN PropertyAddress, OwnerAddress, TaxDistrict ```
 
 This script is now fully documented with comments to explain each step in the data cleaning process.
